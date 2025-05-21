@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["metadata", "responses", "references"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["team_id", "run_id", "topic_id"],
+      "properties": {
+        "team_id": {
+          "type": "string",
+          "description": "Identifier for the team"
+        },
+        "run_id": {
+          "type": "string",
+          "description": "Identifier for the run"
+        },
+        "topic_id": {
+          "type": "string",
+          "description": "Identifier for the topic"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Contains metadata about the run"
+    },
+    "responses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["text", "citations"],
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The response text"
+          },
+          "citations": {
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "description": "Dictionary mapping document IDs to confidence scores"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of document IDs"
+              }
+            ]
+          }
+        }
+      },
+      "description": "Array of responses with text and citations"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of all document IDs referenced"
+    }
+  }
+}

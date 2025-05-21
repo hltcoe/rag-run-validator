@@ -1,0 +1,29 @@
+[project]
+name = "rag_run_validator"
+version = "0.1.0"
+description = "A simple Python package for validating a RAG run for TREC RAG-related tracks"
+readme = "README.md"
+authors = [
+    {name = "Eugene Yang", email = "eugene.yang@jhu.edu"}
+]
+license = {text = "Apache License 2.0"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: Apache License 2.0",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.7"
+dependencies = ["jsonschema>=4.0.0"]
+
+[project.urls]
+"Homepage" = "https://github.com/hltcoe/rag-run-validatorr"
+"Bug Tracker" = "https://github.com/hltcoe/rag-run-validatorr/issues"
+
+[project.scripts]
+rag_run_validator = "rag_run_validator:cli"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"rag_run_validator.data" = ["*.json"]
