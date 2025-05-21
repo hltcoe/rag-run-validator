@@ -16,8 +16,8 @@ requires-python = ">=3.7"
 dependencies = ["jsonschema>=4.0.0"]
 
 [project.urls]
-"Homepage" = "https://github.com/hltcoe/rag-run-validatorr"
-"Bug Tracker" = "https://github.com/hltcoe/rag-run-validatorr/issues"
+"Homepage" = "https://github.com/hltcoe/rag-run-validator"
+"Bug Tracker" = "https://github.com/hltcoe/rag-run-validator/issues"
 
 [project.scripts]
 rag_run_validator = "rag_run_validator:cli"

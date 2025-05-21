@@ -5,7 +5,7 @@ import json
 import jsonschema
 from jsonschema.exceptions import ValidationError
 
-default_schema = json.loads((Path(__file__).absolute().parent / "default.json").read_text())
+default_schema = json.loads((Path(__file__).absolute().parent / "data" / "default.json").read_text())
 
 def read_jsonl(fn):
     with open(fn) as f:
@@ -42,17 +42,16 @@ def cli():
     schema = json.loads(Path(args.schema).read_text()) if args.schema is not None else default_schema
     
     all_passed = True
-    with open(args.run) as run_f:
-        for i, topic_run in enumerate(read_jsonl(run_f)):
-            try:
-                validate(topic_run, schema)
-            except ValidationError as e: 
-                all_passed = False
-                print(f"Validation error on line {i+1}")
-                if args.verbose:
-                    print(e)
-                if args.stop_at_error:
-                    break
+    for i, topic_run in enumerate(read_jsonl(args.run)):
+        try:
+            validate(topic_run, schema)
+        except ValidationError as e: 
+            all_passed = False
+            print(f"Validation error on line {i+1}")
+            if args.verbose:
+                print(e)
+            if args.stop_at_error:
+                break
 
     if not all_passed:
         exit(1)
