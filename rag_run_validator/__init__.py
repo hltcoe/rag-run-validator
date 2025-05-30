@@ -1,5 +1,6 @@
 import argparse
 from pathlib import Path
+import io
 
 import json
 import jsonschema
@@ -8,15 +9,19 @@ from jsonschema.exceptions import ValidationError
 default_schema = json.loads((Path(__file__).absolute().parent / "data" / "default.json").read_text())
 
 def read_jsonl(fn):
-    with open(fn) as f:
-        yield from map(json.loads, f)
+    if isinstance(fn, io.IOBase):
+        yield from map(json.loads, fn)
+    else:
+        with open(fn) as f:
+            yield from map(json.loads, f)
 
 def validate(run, schema=None):
     if isinstance(run, str):
-        if Path(run).exists():
-            run = list(read_jsonl(run))
+        if run.startswith("[") or run.startswith("{"):
+            run = list(read_jsonl(io.StringIO(run)))
         else:
-            run = json.loads(run)
+            run = list(read_jsonl(run))
+            
     if isinstance(run, dict):
         run = [run]
 
