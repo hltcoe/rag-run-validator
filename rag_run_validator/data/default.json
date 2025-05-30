@@ -5,7 +5,7 @@
   "properties": {
     "metadata": {
       "type": "object",
-      "required": ["team_id", "run_id", "topic_id"],
+      "required": ["team_id", "run_id"],
       "properties": {
         "team_id": {
           "type": "string",
@@ -18,8 +18,26 @@
         "topic_id": {
           "type": "string",
           "description": "Identifier for the topic"
+        },
+        "request_id": {
+          "type": "string",
+          "description": "Identifier for the request"
         }
       },
+      "oneOf": [
+        {
+          "required": ["topic_id"],
+          "not": {
+            "required": ["request_id"]
+          }
+        },
+        {
+          "required": ["request_id"],
+          "not": {
+            "required": ["topic_id"]
+          }
+        }
+      ],
       "additionalProperties": true,
       "description": "Contains metadata about the run"
     },
