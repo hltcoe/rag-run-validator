@@ -19,8 +19,45 @@ You can validate the run at command line through our cli interace.
 ```bash
 rag_run_validator your_run.jsonl
 ```
-Please refer to `rag_run_validator --help` for more detail.
 
+For validating against a specific set of topics to ensure all required topics are included 
+in the run, you can provide the topic .jsonl file to the validator.
+If the `limit` field is included in the topic object, the validator will also check for the length
+limit (default to character count). 
+```bash
+rag_run_validator your_run.jsonl --topics topic_file.jsonl
+```
+
+You can also manually specify the length and specify the length limit mode for other tasks.
+```bash
+rag_run_validator your_run.jsonl --limit 1000 --length_limit_mode words
+```
+
+Please refer to `rag_run_validator --help` for more detail.
+```
+usage: TREC RAG-related tracks output format validator [-h] [--schema SCHEMA]
+                                                       [--topics TOPICS]
+                                                       [--limit LIMIT]
+                                                       [--length_limit_mode {characters,words}]
+                                                       [--strict_on_length]
+                                                       [--verbose] [--stop_at_error]
+                                                       run
+
+positional arguments:
+  run                   input .jsonl run file for validation.
+
+options:
+  -h, --help            show this help message and exit
+  --schema SCHEMA       schema .json file for validation
+  --topics TOPICS       topic .jsonl file for validating the length and topic set;
+                        will override `--limit` if topics file is provided.
+  --limit LIMIT         length limit
+  --length_limit_mode {characters,words}
+                        definition of length limit
+  --strict_on_length    whether treat exceeding the length limit as an error
+  --verbose             verbose output for the validation errors.
+  --stop_at_error       stop at the first error encountered.
+```
 
 Or through Python interface
 ```python
