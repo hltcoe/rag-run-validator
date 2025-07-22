@@ -118,35 +118,35 @@ The default schema allows a run of the following format.
 Or with simply a list of citations.
 ```json
 {
-	"metadata": {
-		"team_id": "my_fantastic_team",
-		"run_id": "my_best_run_02", 
-		"topic_id": "101",
-	},
-	"responses": [
-		{
-			"text": "Sky is blue.",
-			"citations": [
-				"docid001",
-				"docid003",
-			]
-		},
-		{
-			"text": "The moon is made out of blue cheese.",
-			"citations": [
-				"docid002"
-			]
-		},
-		{
-			"text": "This is all.",
-			"citations": []
-		}
-	],
-	"references": [
-		"docid0001",
-		"docid0002",
-		"docid0003",
-	]
+    "metadata": {
+        "team_id": "my_fantastic_team",
+        "run_id": "my_best_run_02", 
+        "topic_id": "101",
+    },
+    "responses": [
+        {
+            "text": "Sky is blue.",
+            "citations": [
+                "docid001",
+                "docid003",
+            ]
+        },
+        {
+            "text": "The moon is made out of blue cheese.",
+            "citations": [
+                "docid002"
+            ]
+        },
+        {
+            "text": "This is all.",
+            "citations": []
+        }
+    ],
+    "references": [
+        "docid0001",
+        "docid0002",
+        "docid0003",
+    ]
 }
 ```
 
