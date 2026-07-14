@@ -9,6 +9,7 @@ import jsonschema
 from jsonschema.exceptions import ValidationError
 
 default_schema = json.loads((Path(__file__).absolute().parent / "data" / "default.json").read_text())
+nuggets_schema = json.loads((Path(__file__).absolute().parent / "data" / "nuggets.json").read_text())
 
 def read_jsonl(fn):
     if isinstance(fn, io.IOBase):
@@ -52,6 +53,10 @@ def validate_length(run, length_limit=None, length_limit_mode='characters'):
 def cli():
     parser = argparse.ArgumentParser("TREC RAG-related tracks output format validator")
     parser.add_argument("run", help="input .jsonl run file for validation. ")
+    parser.add_argument(
+        "--format", choices=['report', 'nuggets'], default='report',
+        help="output format to validate; length validation only applies to `report`."
+    )
     parser.add_argument("--schema", default=None, help="schema .json file for validation")
     parser.add_argument(
         "--topics", default=None,
@@ -79,7 +84,10 @@ def cli():
 
     args = parser.parse_args()
 
-    schema = json.loads(Path(args.schema).read_text()) if args.schema is not None else default_schema
+    if args.schema is not None:
+        schema = json.loads(Path(args.schema).read_text())
+    else:
+        schema = nuggets_schema if args.format == 'nuggets' else default_schema
     topics, found_topics = {}, []
     if args.topics is not None:
         topics = {
@@ -102,7 +110,7 @@ def cli():
             elif args.limit is not None:
                 length_limit = args.limit
             
-            if length_limit is not None:
+            if length_limit is not None and args.format == 'report':
                 validate_length(topic_run, length_limit, args.length_limit_mode)
 
         except ValidationError as e: 

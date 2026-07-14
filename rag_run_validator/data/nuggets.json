@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["metadata", "nugget_bank"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["team_id", "run_id", "topic_id"],
+      "properties": {
+        "team_id": {
+          "type": "string",
+          "description": "Identifier for the team"
+        },
+        "run_id": {
+          "type": "string",
+          "maxLength": 25,
+          "description": "Identifier for the run"
+        },
+        "topic_id": {
+          "type": "string",
+          "description": "Identifier for the topic"
+        },
+        "run_desc": {
+          "type": "string",
+          "description": "Description of the components of the run"
+        }
+      },
+      "additionalProperties": true,
+      "description": "Contains metadata about the run"
+    },
+    "nugget_bank": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "aggregator_type"],
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The nugget question"
+          },
+          "aggregator_type": {
+            "type": "string",
+            "enum": ["AND", "OR"],
+            "description": "AND expects all answers to be present, OR expects at least one"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "answer": {
+                  "type": "string",
+                  "description": "The answer text"
+                },
+                "references": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of document IDs supporting this answer"
+                }
+              }
+            },
+            "description": "Array of answer dictionaries"
+          }
+        }
+      },
+      "description": "Ranked list of nugget dictionaries"
+    }
+  }
+}
