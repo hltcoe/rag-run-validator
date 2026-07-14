@@ -5,8 +5,10 @@ A simple Python package for validating a RAG run for TREC RAG-related tracks, in
 [DRAGUN](https://trec-dragun.github.io/), [BioGen](https://dmice.ohsu.edu/trec-biogen/),
 and [iKAT](https://www.trecikat.com/). 
 
-The default schema can be found in `./rag_run_validator/defaut.json`, which allows the citation for each response
+The default schema can be found in `./rag_run_validator/data/default.json`, which allows the citation for each response
 sentence to be either a list of document IDs or a dictionary of document ID to score. 
+A schema for nugget submissions is also provided in `./rag_run_validator/data/nuggets.json`
+and can be selected with the `--format nuggets` flag. 
 
 ## Get Started
 ```bash
@@ -33,14 +35,22 @@ You can also manually specify the length and specify the length limit mode for o
 rag_run_validator your_run.jsonl --limit 1000 --length_limit_mode words
 ```
 
+For validating a nugget submission instead of a report run, use `--format nuggets`.
+```bash
+rag_run_validator your_nuggets.jsonl --format nuggets
+```
+
 Please refer to `rag_run_validator --help` for more detail.
 ```
-usage: TREC RAG-related tracks output format validator [-h] [--schema SCHEMA]
+usage: TREC RAG-related tracks output format validator [-h]
+                                                       [--format {report,nuggets}]
+                                                       [--schema SCHEMA]
                                                        [--topics TOPICS]
                                                        [--limit LIMIT]
                                                        [--length_limit_mode {characters,words}]
                                                        [--strict_on_length]
-                                                       [--verbose] [--stop_at_error]
+                                                       [--verbose]
+                                                       [--stop_at_error]
                                                        run
 
 positional arguments:
@@ -48,6 +58,9 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
+  --format {report,nuggets}
+                        output format to validate; length validation only
+                        applies to `report`.
   --schema SCHEMA       schema .json file for validation
   --topics TOPICS       topic .jsonl file for validating the length and topic set;
                         will override `--limit` if topics file is provided.
@@ -146,6 +159,50 @@ Or with simply a list of citations.
         "docid0001",
         "docid0002",
         "docid0003",
+    ]
+}
+```
+
+## Example Nugget Submission
+
+With `--format nuggets`, each line of the .jsonl file is the nugget set for a topic 
+of the following format. 
+The `answers` array is optional; `aggregator_type` must be either `AND` or `OR`, 
+where an AND nugget expects all answers to be present in the RAG responses and 
+an OR nugget expects at least one. 
+```json
+{
+    "metadata": {
+        "team_id": "my_fantastic_team",
+        "run_id": "my_best_run_02", 
+        "topic_id": "101",
+        "run_desc": "description of the components of the run"
+    },
+    "nugget_bank": [
+        {
+            "question": "What color is the sky?",
+            "aggregator_type": "OR",
+            "answers": [
+                {
+                    "answer": "blue",
+                    "references": ["docid001", "docid003"]
+                }
+            ]
+        },
+        {
+            "question": "What is the moon made of?",
+            "aggregator_type": "AND",
+            "answers": [
+                {
+                    "answer": "blue cheese",
+                    "references": ["docid002"]
+                },
+                {
+                    "answer": "rock",
+                    "references": []
+                }
+            ]
+        }
     ]
 }
 ```
